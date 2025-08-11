@@ -39,3 +39,20 @@
 
 # debug information files
 *.dwo
+
+# rokiss
+rokiss/
+
+# custom
+*.ipch
+*.log
+*.tlog
+*.res
+*.idb
+*.lastbuildstate
+*.db
+*.db-shm
+*.db-wal
+*.opendb
+*.vsidx
+*.user

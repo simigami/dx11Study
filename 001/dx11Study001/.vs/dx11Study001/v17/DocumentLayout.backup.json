@@ -3,12 +3,12 @@
   "WorkspaceRootPath": "E:\\Desktop\\\uC774\uC815\uBBFC\\2025 SW\uB9C8\uC5D0\uC2A4\uD2B8\uB85C 16\uAE30 \uC774\uC815\uBBFC\\DX11 \uACF5\uBD80\\dx11Study\\001\\dx11Study001\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{EAE91589-85F4-4EDA-A0A8-03FA657907AD}|dx11Study001\\dx11Study001.vcxproj|E:\\Desktop\\\uC774\uC815\uBBFC\\2025 SW\uB9C8\uC5D0\uC2A4\uD2B8\uB85C 16\uAE30 \uC774\uC815\uBBFC\\DX11 \uACF5\uBD80\\dx11Study\\001\\dx11Study001\\dx11Study001\\Game.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{EAE91589-85F4-4EDA-A0A8-03FA657907AD}|dx11Study001\\dx11Study001.vcxproj|solutionrelative:dx11Study001\\Game.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{EAE91589-85F4-4EDA-A0A8-03FA657907AD}|dx11Study001\\dx11Study001.vcxproj|E:\\Desktop\\\uC774\uC815\uBBFC\\2025 SW\uB9C8\uC5D0\uC2A4\uD2B8\uB85C 16\uAE30 \uC774\uC815\uBBFC\\DX11 \uACF5\uBD80\\dx11Study\\001\\dx11Study001\\dx11Study001\\Game.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{EAE91589-85F4-4EDA-A0A8-03FA657907AD}|dx11Study001\\dx11Study001.vcxproj|solutionrelative:dx11Study001\\Game.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EAE91589-85F4-4EDA-A0A8-03FA657907AD}|dx11Study001\\dx11Study001.vcxproj|E:\\Desktop\\\uC774\uC815\uBBFC\\2025 SW\uB9C8\uC5D0\uC2A4\uD2B8\uB85C 16\uAE30 \uC774\uC815\uBBFC\\DX11 \uACF5\uBD80\\dx11Study\\001\\dx11Study001\\dx11Study001\\Game.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{EAE91589-85F4-4EDA-A0A8-03FA657907AD}|dx11Study001\\dx11Study001.vcxproj|solutionrelative:dx11Study001\\Game.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{EAE91589-85F4-4EDA-A0A8-03FA657907AD}|dx11Study001\\dx11Study001.vcxproj|E:\\Desktop\\\uC774\uC815\uBBFC\\2025 SW\uB9C8\uC5D0\uC2A4\uD2B8\uB85C 16\uAE30 \uC774\uC815\uBBFC\\DX11 \uACF5\uBD80\\dx11Study\\001\\dx11Study001\\dx11Study001\\Struct.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
@@ -86,13 +86,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "Game.h",
               "DocumentMoniker": "E:\\Desktop\\\uC774\uC815\uBBFC\\2025 SW\uB9C8\uC5D0\uC2A4\uD2B8\uB85C 16\uAE30 \uC774\uC815\uBBFC\\DX11 \uACF5\uBD80\\dx11Study\\001\\dx11Study001\\dx11Study001\\Game.h",
               "RelativeDocumentMoniker": "dx11Study001\\Game.h",
               "ToolTip": "E:\\Desktop\\\uC774\uC815\uBBFC\\2025 SW\uB9C8\uC5D0\uC2A4\uD2B8\uB85C 16\uAE30 \uC774\uC815\uBBFC\\DX11 \uACF5\uBD80\\dx11Study\\001\\dx11Study001\\dx11Study001\\Game.h",
               "RelativeToolTip": "dx11Study001\\Game.h",
-              "ViewState": "AgIAAD8AAAAAAAAAAAAAAE8AAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAEIAAAAAAAAAAAAAAFMAAAASAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
               "WhenOpened": "2025-08-11T06:43:54.943Z",
               "EditorCaption": ""
@@ -203,13 +203,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "Game.cpp",
               "DocumentMoniker": "E:\\Desktop\\\uC774\uC815\uBBFC\\2025 SW\uB9C8\uC5D0\uC2A4\uD2B8\uB85C 16\uAE30 \uC774\uC815\uBBFC\\DX11 \uACF5\uBD80\\dx11Study\\001\\dx11Study001\\dx11Study001\\Game.cpp",
               "RelativeDocumentMoniker": "dx11Study001\\Game.cpp",
               "ToolTip": "E:\\Desktop\\\uC774\uC815\uBBFC\\2025 SW\uB9C8\uC5D0\uC2A4\uD2B8\uB85C 16\uAE30 \uC774\uC815\uBBFC\\DX11 \uACF5\uBD80\\dx11Study\\001\\dx11Study001\\dx11Study001\\Game.cpp",
               "RelativeToolTip": "dx11Study001\\Game.cpp",
-              "ViewState": "AgIAAM0AAAAAAAAAAAAcwN8AAAAVAAAAAAAAAA==",
+              "ViewState": "AgIAAB4AAAAAAAAAAAAxwDUAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2025-08-11T06:46:53.811Z",
               "EditorCaption": ""

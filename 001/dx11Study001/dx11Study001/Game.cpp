@@ -146,6 +146,7 @@ void Game::CreateRenderTargetView()
 	hr = _swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)backBuffer.GetAddressOf());
 	CHECK(hr);
 
+	// 텍스처에 렌더링 된 Draw를 그려 넣는 렌더 타겟 설정
 	_device->CreateRenderTargetView(backBuffer.Get(), nullptr, _renderTargetView.GetAddressOf());
 }
 

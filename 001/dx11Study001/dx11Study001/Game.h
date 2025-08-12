@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 class Game
 {
 public:
@@ -63,4 +64,31 @@ private:
 	/* Misc - Viewport */
 	D3D11_VIEWPORT _viewport = {0};
 	float _clearColor[4] = { 0.5f, 0.5f, 0.5f, 0.5f };
+
+// TODO 003: 삼각형 만들기
+private:
+	void CreateGeometry();
+	void CreateInputLayout();
+	void CreateVS();
+	void CreatePS();
+
+	void LoadShaderFromFile(const wstring& path, const string& name, const string& version, ComPtr<ID3DBlob>& blob);
+
+private:
+	// 기본적인 Geometry 정보를 담는 객체
+	vector<Vertex> _vertices;
+
+	// 정점 정보가 D3D에서 저장되는 버퍼 객체
+	ComPtr<ID3D11Buffer> _vertexBuffer = nullptr;
+
+	// 버퍼 정보가 렌더링 파이프라인의 입력에 전달되는 객체
+	ComPtr<ID3D11InputLayout> _inputLayout = nullptr;
+
+	// VS
+	ComPtr<ID3D11VertexShader> _vertexShader = nullptr;
+	ComPtr<ID3DBlob> _vsBlob = nullptr;
+
+	// PS
+	ComPtr<ID3D11PixelShader> _pixelShader = nullptr;
+	ComPtr<ID3DBlob> _psBlob = nullptr;
 };

@@ -5,7 +5,11 @@
       <FullPath>E:\Desktop\이정민\2025 SW마에스트로 16기 이정민\DX11 공부\dx11Study\001\dx11Study001\Binaries\dx11Study001.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
-  <ContentFiles />
+  <ContentFiles>
+    <ContentFile>
+      <FullPath>E:\Desktop\이정민\2025 SW마에스트로 16기 이정민\DX11 공부\dx11Study\001\dx11Study001\Binaries\Default.cso</FullPath>
+    </ContentFile>
+  </ContentFiles>
   <SatelliteDlls />
   <NonRecipeFileRefs />
 </Project>

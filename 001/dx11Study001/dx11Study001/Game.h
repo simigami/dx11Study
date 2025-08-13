@@ -91,4 +91,19 @@ private:
 	// PS
 	ComPtr<ID3D11PixelShader> _pixelShader = nullptr;
 	ComPtr<ID3DBlob> _psBlob = nullptr;
+
+
+// TODO 004: Index Buffer로 사각형 만들기
+private:
+	vector<uint32> _indices;
+	ComPtr<ID3D11Buffer> _indexBuffer;
+
+// TODO 004: 사진 png 넣기
+private:
+	// Shader Resource View
+	void CreateSRV();
+
+	// 리소스 뷰 객체
+	ComPtr<ID3D11ShaderResourceView> _shaderResourceView;
+	ComPtr<ID3D11ShaderResourceView> _shaderResourceView2;
 };

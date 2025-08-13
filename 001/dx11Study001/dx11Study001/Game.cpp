@@ -29,6 +29,9 @@ void Game::Init(HWND hwnd)
 	CreateVS();
 	CreateInputLayout();
 	CreatePS();
+
+	// 리소스 뷰 생성
+	CreateSRV();
 }
 
 void Game::Update()
@@ -48,6 +51,9 @@ void Game::Render()
 
 		// 정점 정보 저장한 버퍼 설정 명령
 		_deviceContext->IASetVertexBuffers(0, 1, _vertexBuffer.GetAddressOf(), &stride, &offset); 
+	
+		// Index Buffer 연결하는 부분
+		_deviceContext->IASetIndexBuffer(_indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
 
 		// 버퍼와 IL 연결
 		_deviceContext->IASetInputLayout(_inputLayout.Get());
@@ -62,10 +68,16 @@ void Game::Render()
 
 		// PS 과정
 		_deviceContext->PSSetShader(_pixelShader.Get(), nullptr, 0);
+		_deviceContext->PSSetShaderResources(0, 1, _shaderResourceView.GetAddressOf());
+		_deviceContext->PSSetShaderResources(1, 1, _shaderResourceView2.GetAddressOf());
 
 		// OM 과정
 		// 실질적으로 렌더링 된 정보를 그리는 부분
-		_deviceContext->Draw(_vertices.size(), 0);
+		
+		//_deviceContext->Draw(_vertices.size(), 0);
+
+		// _indices 인덱스 만큼 그려주기
+		_deviceContext->DrawIndexed(_indices.size(), 0, 0);
 	}
 
 	RenderEnd();
@@ -164,16 +176,27 @@ void Game::CreateGeometry()
 {
 	// 정점 정보
 	{
-		_vertices.resize(3);
+		_vertices.resize(4);
+
+		// Index Buffer 만들기
+		// 12
+		// 03  -> 사각형 꼭지점 정보
 
 		_vertices[0].position = Vector3(-0.5f, -0.5f, 0.f);
-		_vertices[0].color = Color(1.f, 0.f, 0.f, 1.f);
+		//_vertices[0].color = Color(1.f, 0.f, 0.f, 1.f);
+		_vertices[0].uv = Vector2(0.f, 1.f);
 
-		_vertices[1].position = Vector3(0.f, 0.5f, 0.f);
-		_vertices[1].color = Color(0.f, 1.f, 0.f, 1.f);
+		_vertices[1].position = Vector3(-0.5f, 0.5f, 0.f);
+		//_vertices[1].color = Color(1.f, 0.f, 0.f, 1.f);
+		_vertices[1].uv = Vector2(0.f, 0.f);
 
-		_vertices[2].position = Vector3(0.5f, -0.5f, 0.f);
-		_vertices[2].color = Color(0.f, 0.f, 1.f, 1.f);
+		_vertices[2].position = Vector3(0.5f, 0.5f, 0.f);
+		//_vertices[2].color = Color(1.f, 0.f, 0.f, 1.f);
+		_vertices[2].uv = Vector2(1.f, 0.f);
+
+		_vertices[3].position = Vector3(0.5f, -0.5f, 0.f);
+		//_vertices[3].color = Color(1.f, 0.f, 0.f, 1.f);
+		_vertices[3].uv = Vector2(1.f, 1.f);
 	}
 	
 	// VertexBuffer
@@ -205,6 +228,42 @@ void Game::CreateGeometry()
 
 		// 리소스를 버퍼에 넣는 과정
 		_device->CreateBuffer(&desc, &data, _vertexBuffer.GetAddressOf());
+
+		// 인덱스 버퍼 넣기
+		// 12
+		// 03  -> 사각형 꼭지점 정보
+		{
+			// 정점은 반드시 시계방향 순서로 적어주어야 한다!
+			_indices = {0, 1, 3, 1, 2, 3};
+
+			D3D11_BUFFER_DESC desc;
+			// 버퍼 설명 구조체 설정
+			ZeroMemory(&desc, sizeof(desc));
+			{
+				// 버퍼의 CPU, GPU 통신 방법을 설정
+				// D3D11_USAGE_DEFAULT = GPU RW
+				// D3D11_USAGE_IMMUTABLE = GPU RO, CPU 안됨
+				// D3D11_USAGE_DYNAMIC = GPU R, CPU O
+				// D3D11_USAGE_STAGING = GPU -> CPU 복사만
+				desc.Usage = D3D11_USAGE_IMMUTABLE;
+
+				// 버퍼가 사용되는 용도 = 정점 그릴려고
+				desc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+
+				// 버퍼 대역
+				desc.ByteWidth = (uint32)(sizeof(uint32) * _indices.size());
+			}
+
+			D3D11_SUBRESOURCE_DATA data;
+			// Subresource 데이터 설정
+			ZeroMemory(&data, sizeof(data));
+			{
+				data.pSysMem = _indices.data();
+			}
+
+			HRESULT hr = _device->CreateBuffer(&desc, &data, _indexBuffer.GetAddressOf());
+			CHECK(hr);
+		}
 	}
 }
 
@@ -215,7 +274,10 @@ void Game::CreateInputLayout()
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 
 		// hlsl 상에서 color가 position에 비해 offset 12byte를 가짐으로 12를 넣음
-		{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		//{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+
+		// TEXCOORD 설정
+		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 	};
 
 	const int32 count = sizeof(layout) / sizeof(D3D11_INPUT_ELEMENT_DESC);
@@ -265,5 +327,23 @@ void Game::LoadShaderFromFile(const wstring& path, const string& name, const str
 		blob.GetAddressOf(),
 		nullptr);
 
+	CHECK(hr);
+}
+
+// PNG에서 리소스 가져오기
+void Game::CreateSRV()
+{
+	DirectX::TexMetadata md;
+	DirectX::ScratchImage img;
+	HRESULT hr = ::LoadFromWICFile(L"Skeleton.png", WIC_FLAGS_NONE, &md, img);
+	CHECK(hr);
+
+	hr = ::CreateShaderResourceView(_device.Get(), img.GetImages(), img.GetImageCount(), md, _shaderResourceView.GetAddressOf());
+	CHECK(hr);
+
+	hr = ::LoadFromWICFile(L"Golem.png", WIC_FLAGS_NONE, &md, img);
+	CHECK(hr);
+
+	hr = ::CreateShaderResourceView(_device.Get(), img.GetImages(), img.GetImageCount(), md, _shaderResourceView2.GetAddressOf());
 	CHECK(hr);
 }

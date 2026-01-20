@@ -11,3 +11,9 @@ struct Vertex
 	// 텍스처가 전체 렌더링에 차지할 xy 비율 값이 들어간다
 	Vector2 uv;
 };
+
+struct TransformData
+{
+	Vector3 offset;
+	float dummy;
+};

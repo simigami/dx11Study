@@ -27,6 +27,12 @@ private:
 	// D3D11CreateDeviceAndSwapChain으로 만들어진 후면 버퍼에 렌더링을 하기 위한 지시 함수
 	void CreateRenderTargetView();
 
+	void CreateRasterizerState();
+
+	void CreateSamplerState();
+
+	void CreateBlendState();
+
 	// 뷰포트 설정하는 Setter
 	void SetViewport();
 
@@ -68,6 +74,7 @@ private:
 // TODO 003: 삼각형 만들기
 private:
 	void CreateGeometry();
+	void CreateConstantBuffer();
 	void CreateInputLayout();
 	void CreateVS();
 	void CreatePS();
@@ -83,6 +90,9 @@ private:
 
 	// 버퍼 정보가 렌더링 파이프라인의 입력에 전달되는 객체
 	ComPtr<ID3D11InputLayout> _inputLayout = nullptr;
+
+	// RS
+	ComPtr<ID3D11RasterizerState> _rasterizerState = nullptr;
 
 	// VS
 	ComPtr<ID3D11VertexShader> _vertexShader = nullptr;
@@ -106,4 +116,14 @@ private:
 	// 리소스 뷰 객체
 	ComPtr<ID3D11ShaderResourceView> _shaderResourceView;
 	ComPtr<ID3D11ShaderResourceView> _shaderResourceView2;
+
+	// 샘플러 상태
+	ComPtr<ID3D11SamplerState> _samplerState = nullptr;
+	
+	ComPtr<ID3D11BlendState> _blendState = nullptr;
+
+// TODO 004: Constant Buffer
+private:
+	TransformData _transformData;
+	ComPtr<ID3D11Buffer> _constantBuffer;
 };

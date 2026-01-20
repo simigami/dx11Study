@@ -16,12 +16,17 @@ struct VS_OUTPUT
     float2 uv : TEXCOORD;
 };
 
+cbuffer TransformData : register(b0)
+{
+    float4 offset;
+}
+
 // IA - VS - RS - PS - OM
 VS_OUTPUT VS(VS_INPUT input)
 {
     // 좌표 변환, 애니메이션 등의 역할이 여기에서 수행되게 된다
     VS_OUTPUT output;
-    output.position = input.position;
+    output.position = input.position + offset;
     output.uv = input.uv;
 
     return output;

@@ -133,8 +133,10 @@
     <ClInclude Include="dx11Study001.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="Graphics.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="SimpleMath.h" />
     <ClInclude Include="Struct.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Types.h" />
@@ -143,9 +145,11 @@
   <ItemGroup>
     <ClCompile Include="dx11Study001.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="SimpleMath.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="dx11Study001.rc" />
@@ -162,6 +166,9 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">VS</EntryPointName>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="SimpleMath.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

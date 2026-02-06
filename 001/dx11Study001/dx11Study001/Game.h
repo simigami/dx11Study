@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <memory>
 class Game
 {
 public:
@@ -12,66 +13,33 @@ public:
 	void Render();
 
 private:
-	HWND _hwnd;
-	uint32 _width = 0;
-	uint32 _height = 0;
-
-// ·»´õ¸µÀ» À§ÇÑ ÇÔ¼ö
-private:
-	void RenderBegin();
-	void RenderEnd();
-
-private:
-	void CreateDeviceAndSwapChain();
-
-	// D3D11CreateDeviceAndSwapChainÀ¸·Î ¸¸µé¾îÁø ÈÄ¸é ¹öÆÛ¿¡ ·»´õ¸µÀ» ÇÏ±â À§ÇÑ Áö½Ã ÇÔ¼ö
-	void CreateRenderTargetView();
+	shared_ptr<Graphics> _Graphics;
 
 	void CreateRasterizerState();
-
 	void CreateSamplerState();
-
 	void CreateBlendState();
-
-	// ºäÆ÷Æ® ¼³Á¤ÇÏ´Â Setter
-	void SetViewport();
 
 private:
 	/* Interface D3D11 Device */
 
-	//ID3D11Device* _device; new°¡ ¾Æ´Ñ, D3D11CreateDeviceÇÔ¼ö¸¦ ÅëÇØ »ý¼º
-	//ID3D11DeviceContext* _deviceContext;
-
-	// ½º¸¶Æ® Æ÷ÀÎÅÍ·Î Device¸¦ °ü¸®ÇÏ´Â ¹æ¹ý
-	ComPtr<ID3D11Device> _device = nullptr;
-	ComPtr<ID3D11DeviceContext> _deviceContext = nullptr;
-	ComPtr<IDXGISwapChain> _swapChain = nullptr;
-
-	// GPU ¸ðµ¨ÀÌ ¸¹¾ÆÁö´Âµ¥ µð¹ÙÀÌ½º°¡ ¾î¶»°Ô ´Ù Áö¿øÇÒ±î?
-	// DX¿¡¼­´Â ÀÎÅÍÆäÀÌ½º¸¸ ¸¸µé¾î ÁÖ°í, InternalÀº MSFT¿Í NVDA¿¡¼­ ÇÏµµ·Ï ÇÏÀÚ
+	// GPU ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Âµï¿½ ï¿½ï¿½ï¿½ï¿½Ì½ï¿½ï¿½ï¿½ ï¿½î¶»ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ò±ï¿½?
+	// DXï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö°ï¿½, Internalï¿½ï¿½ MSFTï¿½ï¿½ NVDAï¿½ï¿½ï¿½ï¿½ ï¿½Ïµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
 	/* Device & DeviceContext 
 	* https://learn.microsoft.com/ko-kr/windows/win32/direct3d11/overviews-direct3d-11-devices-intro
 	*/
-	// Device : ¼Ò½º¸¦ ¸¸µé¾îÁÖ´Â ÃÑ»ç·É°ü
-	// CreateDevice, CreateDeviceWithSwapChain À¸·Î »ý¼º
-	// DeviceContext : ¸¸µé¾îÁø ¼Ò½ºµéÀÇ »óÈ£ÀÛ¿ëÀ» Áö½ÃÇÏ´Â ÃÑ»ç·É°ü
+	// Device : ï¿½Ò½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ ï¿½Ñ»ï¿½É°ï¿½
+	// CreateDevice, CreateDeviceWithSwapChain ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+	// DeviceContext : ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ò½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È£ï¿½Û¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Ñ»ï¿½É°ï¿½
 
 	/* DXGI */
-	// ±×·¡ÇÈÀÇ ÀÏºÎ°¡ ´Ù¸¥ ºÎºÐº¸´Ù ´õ ´À¸®°Ô ÁøÈ­ÇÏ¿©, µ¶¸³µÈ ¶óÀÌºê·¯¸®¸¦ Á¦ÀÛÇÔ
+	// ï¿½×·ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ÏºÎ°ï¿½ ï¿½Ù¸ï¿½ ï¿½ÎºÐºï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È­ï¿½Ï¿ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ìºê·¯ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	// 
 
 	/* SwapChain */
-	// double buffering°ú °°ÀÌ È°¼ºÈ­ ÇØ¾ß ÇÏ´Â ¹öÆÛÀÇ ºñÆ® ºí¸µÅ©¸¦ ÇØÁÖ´Â ÁÖÃ¼
+	// double bufferingï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ È°ï¿½ï¿½È­ ï¿½Ø¾ï¿½ ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ® ï¿½ï¿½Å©ï¿½ï¿½ ï¿½ï¿½ï¿½Ö´ï¿½ ï¿½ï¿½Ã¼
 
-	/* Render Target View */
-	ComPtr<ID3D11RenderTargetView> _renderTargetView;
-
-	/* Misc - Viewport */
-	D3D11_VIEWPORT _viewport = {0};
-	float _clearColor[4] = { 0.5f, 0.5f, 0.5f, 0.5f };
-
-// TODO 003: »ï°¢Çü ¸¸µé±â
+// TODO 003: ï¿½ï°¢ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½
 private:
 	void CreateGeometry();
 	void CreateConstantBuffer();
@@ -82,13 +50,13 @@ private:
 	void LoadShaderFromFile(const wstring& path, const string& name, const string& version, ComPtr<ID3DBlob>& blob);
 
 private:
-	// ±âº»ÀûÀÎ Geometry Á¤º¸¸¦ ´ã´Â °´Ã¼
+	// ï¿½âº»ï¿½ï¿½ï¿½ï¿½ Geometry ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¼
 	vector<Vertex> _vertices;
 
-	// Á¤Á¡ Á¤º¸°¡ D3D¿¡¼­ ÀúÀåµÇ´Â ¹öÆÛ °´Ã¼
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ D3Dï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ç´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¼
 	ComPtr<ID3D11Buffer> _vertexBuffer = nullptr;
 
-	// ¹öÆÛ Á¤º¸°¡ ·»´õ¸µ ÆÄÀÌÇÁ¶óÀÎÀÇ ÀÔ·Â¿¡ Àü´ÞµÇ´Â °´Ã¼
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ô·Â¿ï¿½ ï¿½ï¿½ï¿½ÞµÇ´ï¿½ ï¿½ï¿½Ã¼
 	ComPtr<ID3D11InputLayout> _inputLayout = nullptr;
 
 	// RS
@@ -103,21 +71,21 @@ private:
 	ComPtr<ID3DBlob> _psBlob = nullptr;
 
 
-// TODO 004: Index Buffer·Î »ç°¢Çü ¸¸µé±â
+// TODO 004: Index Bufferï¿½ï¿½ ï¿½ç°¢ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½
 private:
 	vector<uint32> _indices;
 	ComPtr<ID3D11Buffer> _indexBuffer;
 
-// TODO 004: »çÁø png ³Ö±â
+// TODO 004: ï¿½ï¿½ï¿½ï¿½ png ï¿½Ö±ï¿½
 private:
 	// Shader Resource View
 	void CreateSRV();
 
-	// ¸®¼Ò½º ºä °´Ã¼
+	// ï¿½ï¿½ï¿½Ò½ï¿½ ï¿½ï¿½ ï¿½ï¿½Ã¼
 	ComPtr<ID3D11ShaderResourceView> _shaderResourceView;
 	ComPtr<ID3D11ShaderResourceView> _shaderResourceView2;
 
-	// »ùÇÃ·¯ »óÅÂ
+	// ï¿½ï¿½ï¿½Ã·ï¿½ ï¿½ï¿½ï¿½ï¿½
 	ComPtr<ID3D11SamplerState> _samplerState = nullptr;
 	
 	ComPtr<ID3D11BlendState> _blendState = nullptr;
@@ -126,4 +94,10 @@ private:
 private:
 	TransformData _transformData;
 	ComPtr<ID3D11Buffer> _constantBuffer;
+
+// TODO 005 : SRT
+private:
+	Vector3 _localPosition = {0.f, 0.f, 0.f,};
+	Vector3 _localRotation = {0.f, 0.f, 0.f,};
+	Vector3 _localScale = {1.f, 1.f, 1.f,};
 };

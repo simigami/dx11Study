@@ -37,7 +37,4 @@ using namespace Microsoft::WRL;
 
 #define CHECK(p) assert(SUCCEEDED(p));
 
-class pch
-{
-
-};
+#include "Graphics.h"

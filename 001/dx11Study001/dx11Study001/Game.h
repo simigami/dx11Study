@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <memory>
+
 class Game
 {
 public:
@@ -13,33 +14,12 @@ public:
 	void Render();
 
 private:
-	shared_ptr<Graphics> _Graphics;
+	shared_ptr<Graphics> _graphics;
 
 	void CreateRasterizerState();
 	void CreateSamplerState();
 	void CreateBlendState();
 
-private:
-	/* Interface D3D11 Device */
-
-	// GPU ���� �������µ� ����̽��� ��� �� �����ұ�?
-	// DX������ �������̽��� ����� �ְ�, Internal�� MSFT�� NVDA���� �ϵ��� ����
-
-	/* Device & DeviceContext 
-	* https://learn.microsoft.com/ko-kr/windows/win32/direct3d11/overviews-direct3d-11-devices-intro
-	*/
-	// Device : �ҽ��� ������ִ� �ѻ�ɰ�
-	// CreateDevice, CreateDeviceWithSwapChain ���� ����
-	// DeviceContext : ������� �ҽ����� ��ȣ�ۿ��� �����ϴ� �ѻ�ɰ�
-
-	/* DXGI */
-	// �׷����� �Ϻΰ� �ٸ� �κк��� �� ������ ��ȭ�Ͽ�, ������ ���̺귯���� ������
-	// 
-
-	/* SwapChain */
-	// double buffering�� ���� Ȱ��ȭ �ؾ� �ϴ� ������ ��Ʈ ��ũ�� ���ִ� ��ü
-
-// TODO 003: �ﰢ�� �����
 private:
 	void CreateGeometry();
 	void CreateConstantBuffer();
@@ -50,14 +30,13 @@ private:
 	void LoadShaderFromFile(const wstring& path, const string& name, const string& version, ComPtr<ID3DBlob>& blob);
 
 private:
-	// �⺻���� Geometry ������ ��� ��ü
 	vector<Vertex> _vertices;
+ 	shared_ptr<VertexBuffer> _vertexBuffer;
+	
+	vector<uint32> _indices;
+	shared_ptr<IndexBuffer> _indexBuffer;
 
-	// ���� ������ D3D���� ����Ǵ� ���� ��ü
-	ComPtr<ID3D11Buffer> _vertexBuffer = nullptr;
-
-	// ���� ������ ������ ������������ �Է¿� ���޵Ǵ� ��ü
-	ComPtr<ID3D11InputLayout> _inputLayout = nullptr;
+	shared_ptr<InputLayout> _inputLayout = nullptr;
 
 	// RS
 	ComPtr<ID3D11RasterizerState> _rasterizerState = nullptr;
@@ -71,21 +50,18 @@ private:
 	ComPtr<ID3DBlob> _psBlob = nullptr;
 
 
-// TODO 004: Index Buffer�� �簢�� �����
+// TODO 004: Index Buffer
 private:
-	vector<uint32> _indices;
-	ComPtr<ID3D11Buffer> _indexBuffer;
+	// ComPtr<ID3D11Buffer> _indexBuffer;
 
-// TODO 004: ���� png �ֱ�
+// TODO 004: png
 private:
 	// Shader Resource View
 	void CreateSRV();
-
-	// ���ҽ� �� ��ü
+	
 	ComPtr<ID3D11ShaderResourceView> _shaderResourceView;
 	ComPtr<ID3D11ShaderResourceView> _shaderResourceView2;
-
-	// ���÷� ����
+	
 	ComPtr<ID3D11SamplerState> _samplerState = nullptr;
 	
 	ComPtr<ID3D11BlendState> _blendState = nullptr;

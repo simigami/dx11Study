@@ -38,3 +38,6 @@ using namespace Microsoft::WRL;
 #define CHECK(p) assert(SUCCEEDED(p));
 
 #include "Graphics.h"
+#include "IndexBuffer.h"
+#include "InputLayout.h"
+#include "VertexBuffer.h"

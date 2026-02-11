@@ -11,8 +11,12 @@ Game::~Game()
 
 void Game::Init(HWND hwnd)
 {
-	_Graphics = make_shared<Graphics>(hwnd);
+	_graphics = make_shared<Graphics>(hwnd);
+	_vertexBuffer = make_shared<VertexBuffer>(_graphics->GetDevice());
+	_indexBuffer = make_shared<IndexBuffer>(_graphics->GetDevice());
+	_inputLayout = make_shared<InputLayout>(_graphics->GetDevice());
 	
+	// 기하학 적인 도형에 대한 메모리 정보 + 버텍스 버퍼에 넘겨줌
 	CreateGeometry();
 	CreateVS();
 	CreateInputLayout();
@@ -43,33 +47,33 @@ void Game::Update()
 	D3D11_MAPPED_SUBRESOURCE subResources;
 	ZeroMemory(&subResources, sizeof(D3D11_MAPPED_SUBRESOURCE));
 
-	_Graphics->GetDeviceContext()->Map(
+	_graphics->GetDeviceContext()->Map(
 		_constantBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD,
 		0, &subResources
 	);
 
 	::memcpy(subResources.pData, &_transformData, sizeof(_transformData));
 
-	_Graphics->GetDeviceContext()->Unmap(
+	_graphics->GetDeviceContext()->Unmap(
 		_constantBuffer.Get(), 0
 	);
 }
 
 void Game::Render()
 {
-	_Graphics->RenderBegin();
+	_graphics->RenderBegin();
 
 	{
 		uint32 stride = sizeof(Vertex);
 		uint32 offset = 0;
 		
-		auto _deviceContext = _Graphics->GetDeviceContext();
+		auto _deviceContext = _graphics->GetDeviceContext();
 		
-		_deviceContext->IASetVertexBuffers(0, 1, _vertexBuffer.GetAddressOf(), &stride, &offset); 
+		_deviceContext->IASetVertexBuffers(0, 1, _vertexBuffer->GetComPtr().GetAddressOf(), &stride, &offset); 
 
-		_deviceContext->IASetIndexBuffer(_indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
+		_deviceContext->IASetIndexBuffer(_indexBuffer->GetComPtr().Get(), DXGI_FORMAT_R32_UINT, 0);
 
-		_deviceContext->IASetInputLayout(_inputLayout.Get());
+		_deviceContext->IASetInputLayout(_inputLayout->GetComPtr().Get());
 		
 		_deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 		
@@ -90,7 +94,7 @@ void Game::Render()
 		_deviceContext->DrawIndexed(_indices.size(), 0, 0);
 	}
 
-	_Graphics->RenderEnd();
+	_graphics->RenderEnd();
 }
 
 void Game::CreateRasterizerState()
@@ -102,7 +106,7 @@ void Game::CreateRasterizerState()
 	desc.CullMode = D3D11_CULL_BACK;
 	desc.FrontCounterClockwise = false;
 
-	HRESULT hr = _Graphics->GetDevice()->CreateRasterizerState(
+	HRESULT hr = _graphics->GetDevice()->CreateRasterizerState(
 		&desc, _rasterizerState.GetAddressOf()
 	);
 	CHECK(hr);
@@ -129,7 +133,7 @@ void Game::CreateSamplerState()
 	desc.MinLOD = FLT_MAX;
 	desc.MipLODBias = 0.0f;
 
-	_Graphics->GetDevice()->CreateSamplerState(
+	_graphics->GetDevice()->CreateSamplerState(
 		&desc, 
 		_samplerState.GetAddressOf()
 	);
@@ -154,7 +158,7 @@ void Game::CreateBlendState()
 
 	desc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 
-	_Graphics->GetDevice()->CreateBlendState(
+	_graphics->GetDevice()->CreateBlendState(
 		&desc, 
 		_blendState.GetAddressOf()
 	);
@@ -182,48 +186,12 @@ void Game::CreateGeometry()
 		_vertices[3].uv = Vector2(1.f, 1.f);
 	}
 	
-	// VertexBuffer
+	// VertexBuffer + IndexBuffer
 	{
-		D3D11_BUFFER_DESC desc;
-		ZeroMemory(&desc, sizeof(desc));
-		{
-			desc.Usage = D3D11_USAGE_IMMUTABLE;
-			
-			desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-
-			desc.ByteWidth = (uint32)(sizeof(Vertex) * _vertices.size());
-		}
-
-		D3D11_SUBRESOURCE_DATA data;
-
-		ZeroMemory(&data, sizeof(data));
-		{
-			data.pSysMem = _vertices.data();
-		}
-		_Graphics->GetDevice()->CreateBuffer(&desc, &data, _vertexBuffer.GetAddressOf());
-
-		{
-			_indices = {0, 1, 3, 1, 2, 3};
-
-			D3D11_BUFFER_DESC desc;
-
-			ZeroMemory(&desc, sizeof(desc));
-			{
-				desc.Usage = D3D11_USAGE_IMMUTABLE;
-				desc.BindFlags = D3D11_BIND_INDEX_BUFFER;
-				desc.ByteWidth = (uint32)(sizeof(uint32) * _indices.size());
-			}
-
-			D3D11_SUBRESOURCE_DATA data;
-
-			ZeroMemory(&data, sizeof(data));
-			{
-				data.pSysMem = _indices.data();
-			}
-
-			HRESULT hr = _Graphics->GetDevice()->CreateBuffer(&desc, &data, _indexBuffer.GetAddressOf());
-			CHECK(hr);
-		}
+		_vertexBuffer->Create(_vertices);
+		
+		_indices = {0, 1, 3, 1, 2, 3};
+		_indexBuffer->Create(_indices);
 	}
 }
 
@@ -236,7 +204,7 @@ void Game::CreateConstantBuffer()
 	desc.ByteWidth = sizeof(TransformData);
 	desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 
-	HRESULT hr = _Graphics->GetDevice()->CreateBuffer(
+	HRESULT hr = _graphics->GetDevice()->CreateBuffer(
 		&desc, nullptr, _constantBuffer.GetAddressOf()
 	);
 
@@ -245,21 +213,19 @@ void Game::CreateConstantBuffer()
 
 void Game::CreateInputLayout()
 {
-	D3D11_INPUT_ELEMENT_DESC layout[] =
+	vector<D3D11_INPUT_ELEMENT_DESC> layout =
 	{
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 	};
-
-	const int32 count = sizeof(layout) / sizeof(D3D11_INPUT_ELEMENT_DESC);
 	
-	_Graphics->GetDevice()->CreateInputLayout(layout, count, _vsBlob->GetBufferPointer(), _vsBlob->GetBufferSize(), _inputLayout.GetAddressOf());
+	_inputLayout->Create(layout, _vsBlob);
 }
 
 void Game::CreateVS()
 {
 	LoadShaderFromFile(L"Default.hlsl", "VS", "vs_5_0", _vsBlob);
- 	HRESULT hr = _Graphics->GetDevice()->CreateVertexShader(
+ 	HRESULT hr = _graphics->GetDevice()->CreateVertexShader(
 		_vsBlob->GetBufferPointer(), 
 		_vsBlob->GetBufferSize(), 
 		nullptr, 
@@ -271,7 +237,7 @@ void Game::CreateVS()
 void Game::CreatePS()
 {
 	LoadShaderFromFile(L"Default.hlsl", "PS", "ps_5_0", _psBlob);
-	HRESULT hr = _Graphics->GetDevice()->CreatePixelShader(
+	HRESULT hr = _graphics->GetDevice()->CreatePixelShader(
 		_psBlob->GetBufferPointer(),
 		_psBlob->GetBufferSize(), 
 		nullptr, 
@@ -305,12 +271,12 @@ void Game::CreateSRV()
 	HRESULT hr = ::LoadFromWICFile(L"Skeleton.png", WIC_FLAGS_NONE, &md, img);
 	CHECK(hr);
 
-	hr = ::CreateShaderResourceView(_Graphics->GetDevice().Get(), img.GetImages(), img.GetImageCount(), md, _shaderResourceView.GetAddressOf());
+	hr = ::CreateShaderResourceView(_graphics->GetDevice().Get(), img.GetImages(), img.GetImageCount(), md, _shaderResourceView.GetAddressOf());
 	CHECK(hr);
 
 	hr = ::LoadFromWICFile(L"Golem.png", WIC_FLAGS_NONE, &md, img);
 	CHECK(hr);
 
-	hr = ::CreateShaderResourceView(_Graphics->GetDevice().Get(), img.GetImages(), img.GetImageCount(), md, _shaderResourceView2.GetAddressOf());
+	hr = ::CreateShaderResourceView(_graphics->GetDevice().Get(), img.GetImages(), img.GetImageCount(), md, _shaderResourceView2.GetAddressOf());
 	CHECK(hr);
 }

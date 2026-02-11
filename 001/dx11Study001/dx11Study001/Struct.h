@@ -1,16 +1,22 @@
 #pragma once
+
 #include "Types.h"
 
-
-struct Vertex
-{
-	Vector3 position;
-	//Color color;
-
-	// 0~1 사이의 2차원 값 정의
-	// 텍스처가 전체 렌더링에 차지할 xy 비율 값이 들어간다
-	Vector2 uv;
-};
+// struct VertexTextureData
+// {
+// 	Vector3 position = {0, 0, 0};
+// 	Vector2 uv = {0, 0};
+//
+// 	std::vector<D3D11_INPUT_ELEMENT_DESC> descs;
+// };
+//
+// struct VertexColorData
+// {
+// 	Vector3 position = {0, 0, 0};
+// 	Color color = {0, 0, 0, 0};
+// 	
+// 	std::vector<D3D11_INPUT_ELEMENT_DESC> descs;
+// };
 
 struct TransformData
 {

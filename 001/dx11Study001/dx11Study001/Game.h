@@ -14,6 +14,7 @@ public:
 	void Render();
 
 private:
+	HWND _hwnd;
 	shared_ptr<Graphics> _graphics;
 
 	void CreateRasterizerState();
@@ -30,10 +31,9 @@ private:
 	void LoadShaderFromFile(const wstring& path, const string& name, const string& version, ComPtr<ID3DBlob>& blob);
 
 private:
-	vector<Vertex> _vertices;
- 	shared_ptr<VertexBuffer> _vertexBuffer;
+	shared_ptr<Geometry<VertexTextureData>> _geometry;
 	
-	vector<uint32> _indices;
+ 	shared_ptr<VertexBuffer> _vertexBuffer;
 	shared_ptr<IndexBuffer> _indexBuffer;
 
 	shared_ptr<InputLayout> _inputLayout = nullptr;
@@ -48,11 +48,6 @@ private:
 	// PS
 	ComPtr<ID3D11PixelShader> _pixelShader = nullptr;
 	ComPtr<ID3DBlob> _psBlob = nullptr;
-
-
-// TODO 004: Index Buffer
-private:
-	// ComPtr<ID3D11Buffer> _indexBuffer;
 
 // TODO 004: png
 private:

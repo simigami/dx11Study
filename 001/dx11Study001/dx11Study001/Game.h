@@ -1,5 +1,4 @@
 #pragma once
-#include <string>
 #include <memory>
 
 class Game
@@ -16,21 +15,18 @@ public:
 private:
 	HWND _hwnd;
 	shared_ptr<Graphics> _graphics;
-
-	void CreateRasterizerState();
-	void CreateSamplerState();
-	void CreateBlendState();
+	shared_ptr<Pipeline> _pipeline;
 
 private:
 	shared_ptr<Geometry<VertexTextureData>> _geometry;
 	
+	// Buffers
  	shared_ptr<VertexBuffer> _vertexBuffer;
 	shared_ptr<IndexBuffer> _indexBuffer;
-
 	shared_ptr<InputLayout> _inputLayout = nullptr;
 
 	// RS
-	ComPtr<ID3D11RasterizerState> _rasterizerState = nullptr;
+	shared_ptr<RasterizerState> _rasterizerState = nullptr;
 
 	// // VS
 	shared_ptr<VertexShader> _vertexShader = nullptr;
@@ -43,8 +39,8 @@ private:
 	shared_ptr<Texture> _texture1;
 	shared_ptr<Texture> _texture2;
 	
-	ComPtr<ID3D11SamplerState> _samplerState = nullptr;
-	ComPtr<ID3D11BlendState> _blendState = nullptr;
+	shared_ptr<SamplerState> _samplerState = nullptr;
+	shared_ptr<BlendState> _blendState = nullptr;
 
 // TODO 004: Constant Buffer
 private:

@@ -27,7 +27,7 @@ namespace
     }
 }
 
-Transform::Transform()
+Transform::Transform() : Super(ComponentType::Transform)
 {
 }
 
@@ -35,9 +35,9 @@ Transform::~Transform()
 {
 }
 
-void Transform::Init()
+void Transform::Awake()
 {
-    Component::Init();
+    Component::Awake();
 }
 
 void Transform::Update()
@@ -130,14 +130,6 @@ void Transform::UpdateTransform()
     SimpleMath::Quaternion quat;
     _matWorld.Decompose(_worldScale, quat, _worldPosition);
     _worldRotation = QuaternionToEuler(quat);
-    
-    // TransformCoord
-    // TransformNormal
-    _rightVector = Vector3::TransformNormal(Vector3::Right, _matWorld);
-    _upVector = Vector3::TransformNormal(Vector3::Up, _matWorld);
-    
-    // Simplemath use Backward as 0,0,1
-    _lookVector = Vector3::TransformNormal(Vector3::Backward, _matWorld);
 
     // TODO
     for (const auto& child : _children)

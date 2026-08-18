@@ -1,64 +1,20 @@
 ﻿#pragma once
-#include <string>
 
-enum ShdaerScope
+class Shader : public ResourceBase
 {
-    SS_None = 0,
-    SS_VertexShader = 1 << 0,
-    SS_PixelShader = 1 << 1,
-    SS_Both = SS_VertexShader | SS_PixelShader,
-};
-
-class Shader
-{
+    using Super = ResourceBase;
 public:
-    Shader(ComPtr<ID3D11Device> device);
+    Shader();
     virtual ~Shader();
-    
-    virtual void Create(const wstring& path, const string& name, const string version) abstract;
-    
-    ComPtr<ID3DBlob> GetBlob() { return _blob; }
-    
-protected:
-    void LoadShaderFromFile(const wstring& path, const string& name, const string& version);
-    
-protected:
-    wstring _path;
-    string _name;
-    
-    // VS
-    ComPtr<ID3D11Device> _device;
-    ComPtr<ID3DBlob> _blob = nullptr;
-};
 
-class VertexShader : public Shader
-{
-    using Super = Shader;
-    
-public:
-    VertexShader(ComPtr<ID3D11Device> device);
-    ~VertexShader();
-    
-    virtual void Create(const wstring& path, const string& name, const string version) override;
-    
-    ComPtr<ID3D11VertexShader> GetComPtr() { return _vertexShader; }
-    
-protected:
-    ComPtr<ID3D11VertexShader> _vertexShader = nullptr;
-};
+    shared_ptr<InputLayout> GetInputLayout() { return _inputLayout; }
+    shared_ptr<VertexShader> GetVertexShader() { return _vertexShader; }
+    shared_ptr<PixelShader> GetPixelShader() { return _pixelShader; }
 
-class PixelShader : public Shader
-{
-    using Super = Shader;
+private:
+    friend class ResourceManager;
 
-public:
-    PixelShader(ComPtr<ID3D11Device> device);
-    ~PixelShader();
-    
-    virtual void Create(const wstring& path, const string& name, const string version) override;
-    
-    ComPtr<ID3D11PixelShader> GetComPtr() { return _pixelShader; }
-    
-protected:
-    ComPtr<ID3D11PixelShader> _pixelShader = nullptr;
+    shared_ptr<InputLayout> _inputLayout = nullptr;
+    shared_ptr<VertexShader> _vertexShader = nullptr;
+    shared_ptr<PixelShader> _pixelShader = nullptr;
 };

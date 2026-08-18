@@ -1,6 +1,8 @@
 #pragma once
 class Graphics
 {
+	DECLARE_SINGLE(Graphics);
+
 public:
 	Graphics(HWND hwnd);
 	~Graphics();

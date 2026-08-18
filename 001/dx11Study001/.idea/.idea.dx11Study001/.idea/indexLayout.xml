@@ -2,7 +2,14 @@
 <project version="4">
   <component name="UserContentModel">
     <attachedFolders />
-    <explicitIncludes />
+    <explicitIncludes>
+      <Path>dx11Study001/InputManager.cpp</Path>
+      <Path>dx11Study001/InputManager.h</Path>
+      <Path>dx11Study001/TimeManager.cpp</Path>
+      <Path>dx11Study001/TimeManager.h</Path>
+      <Path>dx11Study001/tinyxml2.cpp</Path>
+      <Path>dx11Study001/tinyxml2.h</Path>
+    </explicitIncludes>
     <explicitExcludes />
   </component>
 </project>
